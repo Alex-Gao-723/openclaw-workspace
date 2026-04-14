@@ -15,3 +15,6 @@ Thumbs.db
 # 临时文件
 *.tmp
 *.log
+
+# OpenClaw 运行时
+.openclaw/
