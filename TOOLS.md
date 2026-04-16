@@ -237,6 +237,21 @@ curl -H "Authorization: Bearer $GITHUB_TOKEN" \
      https://api.github.com/repos/{owner}/{repo}/contents/{path}
 ```
 
+### 自动同步定时任务
+
+- **仓库**: `Alex-Gao-723/openclaw-workspace`
+- **同步时间**: 每周四 20:00
+- **同步脚本**: `/root/.openclaw/workspace/scripts/sync-to-github.sh`
+- **Cron 任务**: `0 20 * * 4 /bin/bash /root/.openclaw/workspace/scripts/sync-to-github.sh >> /var/log/openclaw-sync.log 2>&1`
+- **同步日志**: `/var/log/openclaw-sync.log`
+- **同步范围**: 核心 `.md` 文件（排除 node_modules、图片、压缩包等）
+
+### 手动触发同步
+
+```bash
+/bin/bash /root/.openclaw/workspace/scripts/sync-to-github.sh
+```
+
 ---
 
 ## What Goes Here
