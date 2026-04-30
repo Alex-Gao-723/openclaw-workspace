@@ -10,7 +10,7 @@ description: Use this skill for any interaction with Kimi Group Chat or its Sess
 - A group chat is a long-running multi-agent workspace. There may be users, a Coordinator, and multiple agents working in parallel.
 - A thread is still part of the same group, but it has its own isolated chat history. Reply in the same chat where the work is happening.
 - Follow the Coordinator's instructions, but do not be passive. Good group work means reading the room, interacting with others, and moving the task forward.
-- Mention people with the exact short-id form `im_mention{member_short_id}`, if you don't mention the agents, they won't receive your message.
+- Mention people with the exact short-id form `<@Member_Name|Member_ShortID>`, if you don't mention the agents, they won't receive your message.
 - `list-members` is for room awareness, not for opening conversations with everyone you discover there. Seeing a worker in the roster does **not** by itself authorize you to message them.
 - Group chat memory is workspace-scoped, not long-term memory. Store required group memories under `.openclaw/workspace/kimi-group-chat/{group-name}/memory.md`.
 - Store files produced for group tasks under `.openclaw/workspace/kimi-group-chat/{group-name}/` unless the task explicitly requires a different location.
@@ -22,7 +22,7 @@ When you receive a new message from a group or thread, follow this order before 
 1. Run `get-group <group_id>` first and read the Group Rules and group information.
 2. After you know `{group-name}`, read the group memory under `.openclaw/workspace/kimi-group-chat/{group-name}/memory.md`.
 3. If this is a new Session, do that memory read immediately after `get-group`, before any task work.
-4. Run `list-members <group_id>` to see which agents and users are in the room.
+4. Run `list-members <group_id>` to see which agents and users are in the room，including their Member_Name and Member_ShortID.
 5. Run `list-messages <chat_id>` to inspect recent context before you speak or act.
 6. Only after those reads should you start the task, reply, or ask for clarification.
 
@@ -50,7 +50,7 @@ Use this as the default loop:
 4. `list-messages`
 5. identify the current target chat
 6. do the work
-7. interact with the right agents or users using `im_mention{member_short_id}`
+7. interact with the right agents or users using `<@Member_Name|Member_ShortID>`
 8. reply with `send-message`
 
 If new Messages arrive and they materially change the task, read the new context again before continuing.
@@ -99,17 +99,17 @@ Use this interaction pattern:
 
 Examples:
 
-- `im_mention{member_short_id} that result changes my approach, send me the source`
-- `im_mention{member_short_id} your note is useful, keep going on that angle`
-- `im_mention{member_short_id} something is off in that claim, check it again`
-- `im_mention{member_short_id} brainstorm this with me, what's the strongest angle here`
+- `<@Member_Name|Member_ShortID> that result changes my approach, send me the source`
+- `<@Member_Name|Member_ShortID> your note is useful, keep going on that angle`
+- `<@Member_Name|Member_ShortID> something is off in that claim, check it again`
+- `<@Member_Name|Member_ShortID> brainstorm this with me, what's the strongest angle here`
 - `结论: I checked the key disagreement, my conclusion is X`
 
 ### Mention The Sender Directly
 
 When you see an interesting Message, do not speak vaguely to the whole room if there is a clear sender to engage with. Mention the sender's short id directly:
 
-- good: `im_mention{member_short_id} expand that point`
+- good: `<@Member_Name|Member_ShortID> expand that point`
 - bad: `can someone expand that point`
 
 Default to direct interaction over generic broadcast when one person's message triggered your follow-up.
@@ -166,7 +166,7 @@ The CLI may expose `send-file`, but for this skill your outward communication sh
 
 | Command | Use | Example |
 |---------|-----|---------|
-| `me` | Get current user info | `kimiim-cli me` |
+| `me` | Get Name and ShortID of yourself | `kimiim-cli me` |
 | `get-group <group_id>` | Read Group Rules and group requirements first | `kimiim-cli get-group group_xxx` |
 | `list-members <group_id>` | Check who is in the room before starting | `kimiim-cli list-members group_xxx` |
 | `list-messages <chat_id>` | Read recent Messages before acting | `kimiim-cli list-messages group_xxx -l 50` |
