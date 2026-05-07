@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>视频笔记助手 - 设置</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f172a;
+      --bg2: #1e293b;
+      --bg3: #334155;
+      --border: #334155;
+      --text: #f1f5f9;
+      --text2: #94a3b8;
+      --text3: #64748b;
+      --accent: #6366f1;
+      --accent-hover: #818cf8;
+      --success: #22c55e;
+      --danger: #ef4444;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    .page {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .page-header h1 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .page-header .icon {
+      font-size: 24px;
+    }
+
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 14px;
+    }
+
+    .form-row {
+      margin-bottom: 14px;
+    }
+
+    .form-row:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--text2);
+      margin-bottom: 6px;
+    }
+
+    label span.required {
+      color: var(--danger);
+      margin-left: 2px;
+    }
+
+    .input-wrap {
+      display: flex;
+      gap: 8px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="url"],
+    select {
+      flex: 1;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 8px 12px;
+      font-size: 13px;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent);
+    }
+
+    input::placeholder {
+      color: var(--text3);
+    }
+
+    .hint-text {
+      font-size: 12px;
+      color: var(--text3);
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+
+    .hint-text a {
+      color: var(--accent-hover);
+      text-decoration: none;
+    }
+
+    .btn {
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 500;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      padding: 8px 20px;
+      font-size: 13px;
+    }
+
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text2);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    .btn-ghost:hover { background: var(--bg3); color: var(--text); }
+
+    .btn-danger-ghost {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    .btn-danger-ghost:hover { background: var(--danger); color: white; }
+
+    .status-msg {
+      margin-top: 10px;
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .status-success {
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .status-error {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .actions-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 16px;
+    }
+
+    .shortcut-display {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text2);
+    }
+
+    kbd {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 3px 8px;
+      font-size: 12px;
+      color: var(--text);
+      font-family: monospace;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    .stat-item {
+      background: var(--bg3);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent-hover);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 2px;
+    }
+
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 14px 0;
+    }
+
+    .model-select-wrap {
+      display: flex;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="page-header">
+      <span class="icon">📹</span>
+      <h1>视频笔记助手 — 设置</h1>
+    </div>
+
+    <!-- API 配置 -->
+    <div class="card">
+      <div class="card-title">DeepSeek API 配置</div>
+
+      <div class="form-row">
+        <label>API Key <span class="required">*</span></label>
+        <div class="input-wrap">
+          <input type="password" id="api-key" placeholder="sk-..." autocomplete="off">
+          <button class="btn btn-ghost" id="btn-toggle-key">显示</button>
+        </div>
+        <div class="hint-text">
+          在 <a href="https://platform.deepseek.com/api_keys" target="_blank">DeepSeek Platform</a> 获取 API Key。
+          Key 仅保存在本地浏览器存储中，不会上传。
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label>AI 模型</label>
+        <div class="model-select-wrap">
+          <select id="ai-model">
+            <option value="deepseek-v4-pro">deepseek-v4-pro（默认）</option>
+          </select>
+        </div>
+        <div class="hint-text">deepseek-chat 是当前最新版本，支持图像理解，适合日常截图分析。</div>
+      </div>
+
+      <div class="form-row">
+        <label>AI 分析提示词（Prompt）</label>
+        <textarea id="ai-prompt" rows="3" style="
+          width: 100%;
+          background: var(--bg3);
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          color: var(--text);
+          padding: 8px 12px;
+          font-size: 13px;
+          outline: none;
+          font-family: inherit;
+          resize: vertical;
+          transition: border-color 0.2s;
+        "></textarea>
+        <div class="hint-text">留空则使用默认提示词。</div>
+      </div>
+
+      <div class="actions-row">
+        <button class="btn btn-primary" id="btn-save-api">保存设置</button>
+        <button class="btn btn-ghost" id="btn-test-api">测试连接</button>
+        <div id="api-status" class="status-msg"></div>
+      </div>
+    </div>
+
+    <!-- 快捷键 -->
+    <div class="card">
+      <div class="card-title">截图快捷键</div>
+      <div class="shortcut-display">
+        当前快捷键：<kbd>Alt</kbd> + <kbd>S</kbd>
+      </div>
+      <div class="hint-text" style="margin-top: 8px;">
+        如需修改，请前往浏览器扩展管理页 → 键盘快捷键 进行设置。<br>
+        Chrome: <code style="font-size:11px; color: var(--text2)">chrome://extensions/shortcuts</code>
+      </div>
+    </div>
+
+    <!-- 使用统计 -->
+    <div class="card">
+      <div class="card-title">使用统计</div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value" id="stat-notes">-</div>
+          <div class="stat-label">笔记总数</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-screenshots">-</div>
+          <div class="stat-label">截图总数</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-storage">-</div>
+          <div class="stat-label">存储占用</div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <div class="actions-row">
+        <button class="btn btn-danger-ghost" id="btn-clear-all">清除所有数据</button>
+      </div>
+    </div>
+
+    <!-- 关于 -->
+    <div class="card">
+      <div class="card-title">关于</div>
+      <div style="font-size: 13px; color: var(--text2); line-height: 1.8;">
+        <strong style="color: var(--text)">视频笔记助手</strong> v1.0.0<br>
+        在 B 站、YouTube 等视频网站按 <kbd>Alt+S</kbd> 截图，<br>
+        Claude AI 自动分析内容，一键生成 Markdown 笔记。
+      </div>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

@@ -468,6 +468,7 @@ def main():
     parser = argparse.ArgumentParser(description="系统健康检查")
     parser.add_argument("--json", action="store_true", help="输出JSON格式")
     parser.add_argument("--quiet", action="store_true", help="仅输出异常")
+    parser.add_argument("--cron-report", action="store_true", help="生成可直接用于cron投递的报告")
     args = parser.parse_args()
 
     jobs = run_cron_list()
@@ -479,6 +480,9 @@ def main():
 
     if args.json:
         print(json.dumps(report, ensure_ascii=False, indent=2))
+    elif args.cron_report:
+        # 直接生成 Markdown 格式的报告，适合 cron 直接投递
+        print_cron_report(report)
     elif args.quiet:
         # 仅输出有问题的任务
         has_issues = print_issues_only(report)
@@ -494,6 +498,62 @@ def main():
         sys.exit(1)
     else:
         sys.exit(0)
+
+
+def print_cron_report(report: Dict[str, Any]):
+    """生成适合直接作为 cron 投递内容的 Markdown 报告"""
+    ts = report["timestamp"]
+    summary = report["summary"]
+    
+    print(f"📊 **系统健康检查 | {ts}**\n")
+    
+    print(f"📊 **任务总览**: {summary['total']} 个任务")
+    print(f"   ✅ 健康: {summary['healthy']} | 🟡 警告: {summary['warning']} | 🔴 严重: {summary['critical']} | ⚪ 禁用: {summary['disabled']}")
+    if summary["deliveryIssues"] > 0:
+        print(f"   📤 投递问题: {summary['deliveryIssues']}")
+    
+    # 系统信息
+    system = report.get("system", {})
+    disk = system.get("disk", {})
+    workspace = system.get("workspace", {})
+    
+    if disk and "error" not in disk:
+        print(f"\n💾 **磁盘空间**: /")
+        print(f"   已用: {disk['percent_used']}% ({disk['used_gb']}GB / {disk['total_gb']}GB) | 可用: {disk['free_gb']}GB")
+    
+    if workspace and "error" not in workspace:
+        print(f"\n📁 **工作空间**: {workspace['path']}")
+        print(f"   大小: {workspace['size_mb']}MB ({workspace['file_count']} 个文件)")
+    
+    # 严重任务
+    if report["jobs"]["critical"]:
+        print(f"\n---\n\n🔴 **严重问题（{len(report['jobs']['critical'])}个）**")
+        for job in report["jobs"]["critical"]:
+            print(f"\n❌ **{job['name']}**")
+            print(f"   状态: {job['lastStatus']} | 连续失败: {job['consecutiveErrors']}次")
+            print(f"   上次运行: {job['lastRunAt']} | 耗时: {job['lastDuration']}")
+            if job["lastError"]:
+                print(f"   错误: {job['lastError']}")
+    
+    # 警告任务
+    if report["jobs"]["warning"]:
+        print(f"\n---\n\n🟡 **警告任务（{len(report['jobs']['warning'])}个）**")
+        for job in report["jobs"]["warning"]:
+            print(f"\n⚠️  **{job['name']}**")
+            print(f"   状态: {job['lastStatus']} | 连续失败: {job['consecutiveErrors']}次")
+            print(f"   上次运行: {job['lastRunAt']}")
+    
+    # 投递问题
+    if report["jobs"]["deliveryIssues"]:
+        print(f"\n---\n\n📤 **投递问题（{len(report['jobs']['deliveryIssues'])}个）**")
+        for job in report["jobs"]["deliveryIssues"]:
+            print(f"\n📨 **{job['name']}**")
+            print(f"   投递状态: {job['lastDeliveryStatus']}")
+    
+    # 建议
+    print(f"\n---\n\n💡 **建议**")
+    for rec in report["recommendations"]:
+        print(f"  {rec}")
 
 
 if __name__ == "__main__":

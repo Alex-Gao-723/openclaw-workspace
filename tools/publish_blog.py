@@ -174,6 +174,32 @@ def upload_to_server(local_file, remote_path):
             f"{SERVER_USER}@{SERVER_HOST}:{remote_path}"
         ]
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+        if result.returncode != 0:
+            return False, result.stderr
+        
+        # 确保文件权限为644（nginx用户可读）
+        chmod_cmd = [
+            "sshpass", "-p", SERVER_PASSWORD,
+            "ssh", "-o", "StrictHostKeyChecking=no",
+            f"{SERVER_USER}@{SERVER_HOST}",
+            f"chmod 644 {remote_path}"
+        ]
+        subprocess.run(chmod_cmd, capture_output=True, text=True, timeout=15)
+        
+        return True, ""
+    except Exception as e:
+        return False, str(e)
+
+def fix_all_blog_permissions():
+    """修复所有博客文件权限（一次性修复工具）"""
+    try:
+        cmd = [
+            "sshpass", "-p", SERVER_PASSWORD,
+            "ssh", "-o", "StrictHostKeyChecking=no",
+            f"{SERVER_USER}@{SERVER_HOST}",
+            f"find {WEB_DIR} -name '*.html' -perm 600 -exec chmod 644 {{}} +"
+        ]
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
         return result.returncode == 0, result.stderr
     except Exception as e:
         return False, str(e)
@@ -220,10 +246,11 @@ def publish_blog(title, content, blog_number=None):
         # 生成HTML
         html_content = generate_blog_html(title, content, blog_number)
         
-        # 创建临时文件
+        # 创建临时文件并设置644权限（确保scp上传后nginx可读）
         with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False, encoding='utf-8') as f:
             f.write(html_content)
             temp_file = f.name
+        os.chmod(temp_file, 0o644)
         
         try:
             # 确保远程目录存在
@@ -267,11 +294,20 @@ def publish_blog(title, content, blog_number=None):
 
 def main():
     """命令行入口"""
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 2:
         print("Usage:")
         print("  python3 publish_blog.py publish <title> <content_file>")
         print("  python3 publish_blog.py publish-stdin <title>")
         print("  python3 publish_blog.py stats")
+        print("  python3 publish_blog.py fix-permissions")
+        sys.exit(1)
+    
+    if len(sys.argv) < 3 and sys.argv[1] not in ["stats", "fix-permissions"]:
+        print("Usage:")
+        print("  python3 publish_blog.py publish <title> <content_file>")
+        print("  python3 publish_blog.py publish-stdin <title>")
+        print("  python3 publish_blog.py stats")
+        print("  python3 publish_blog.py fix-permissions")
         sys.exit(1)
     
     command = sys.argv[1]
@@ -307,6 +343,13 @@ def main():
             capture_output=True, text=True, timeout=10
         )
         print(result.stdout)
+    
+    elif command == "fix-permissions":
+        success, error = fix_all_blog_permissions()
+        if success:
+            print(json.dumps({"success": True, "message": "已修复所有博客文件权限"}, ensure_ascii=False))
+        else:
+            print(json.dumps({"success": False, "error": error}, ensure_ascii=False))
     
     else:
         print(f"Unknown command: {command}")
