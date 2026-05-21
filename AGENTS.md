@@ -117,6 +117,42 @@ Reactions are lightweight social signals. Humans use them constantly — they sa
 
 Skills provide your tools. When you need one, check its `SKILL.md`. Keep local notes (camera names, SSH details, voice preferences) in `TOOLS.md`.
 
+### 📐 Skill 使用约定
+
+| 场景 | 默认 Skill | 说明 |
+|------|-----------|------|
+| 写 HTML / CSS / JS / React / Vue 等前端代码 | `frontend-design` | 避免通用 AI 审美，产出高质量、有设计感的界面 |
+| 创建/管理飞书多维表格 | `feishu-bitable` | 含 27 种字段类型、高级筛选、批量操作 |
+| 飞书日历/日程管理 | `feishu-calendar` | 日历、日程、参会人、忙闲查询 |
+| 创建飞书云文档 | `feishu-create-doc` | 从 Markdown 创建新文档 |
+| 更新飞书云文档 | `feishu-update-doc` | 追加/覆盖/定位替换等 7 种模式 |
+| 获取飞书云文档内容 | `feishu-fetch-doc` | 返回 Markdown 格式 |
+| 飞书 IM 消息读取 | `feishu-im-read` | 聊天记录、话题、搜索、文件下载 |
+| 飞书任务管理 | `feishu-task` | 任务、清单、子任务、评论 |
+| 天气查询 | `weather` | wttr.in / Open-Meteo |
+| 算法艺术/生成艺术 | `algorithmic-art` | p5.js + 种子随机数 |
+| 静态视觉设计 | `canvas-design` | 海报、艺术、PNG/PDF |
+| 前端界面设计 | `frontend-design` | 生产级前端，避免 AI slop |
+| 主题/样式 | `theme-factory` | 10 种预设主题 |
+| 内部通讯写作 | `internal-comms` | 状态报告、领导更新、FAQ 等 |
+| 文档协作写作 | `doc-coauthoring` | 提案、技术规格、决策文档 |
+| 每日认知分析 | `daily-cognitive-analysis` | 录音卡笔记分析 |
+| ClawHub 技能管理 | `clawhub` | 搜索/安装/更新/发布技能 |
+| 健康检查/安全加固 | `healthcheck` | 防火墙、SSH、更新硬化 |
+| MCP 服务器构建 | `mcp-builder` | Model Context Protocol |
+| 技能创建/优化 | `skill-creator` | 创建、编辑、评估技能 |
+| 飞书故障排查 | `feishu-troubleshoot` | FAQ + /feishu_doctor 诊断 |
+| tmux 远程控制 | `tmux` | 交互式 CLI 的远程控制 |
+| webapp 测试 | `webapp-testing` | Playwright 前端测试 |
+| 品牌规范 | `brand-guidelines` | Anthropic 官方品牌色/排版 |
+| 高德地图 CLI | `amap-cli-skill` | 地图操控、路径规划、POI 搜索 |
+| Dreamina 生成 | `dreamina-cli` | 即梦图像生成 |
+| Kimi Group Chat | `kimiim-cli` | Kimi 群聊/会话管理 |
+| JS Eyes 浏览器自动化 | `js-eyes` | 安装、配置、排障 |
+| Node 连接排障 | `node-connect` | 配对失败诊断 |
+| Slack GIF 制作 | `slack-gif-creator` | 动画 GIF |
+| 技能发现/安装 | `find-skills` / `skillhub-preference` | 优先 skillhub，回退 clawhub |
+
 **🎭 Voice Storytelling:** If you have `sag` (ElevenLabs TTS), use voice for stories, movie summaries, and "storytime" moments! Way more engaging than walls of text. Surprise people with funny voices.
 
 **📝 Platform Formatting:**

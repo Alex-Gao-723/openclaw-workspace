@@ -600,5 +600,159 @@
       "file_count": 256,
       "dir_count": 75
     }
+  },
+  {
+    "timestamp": "2026-05-15T05:47:26.056431+08:00",
+    "disk": {
+      "total_gb": 39.07,
+      "used_gb": 12.25,
+      "free_gb": 25.14,
+      "percent_used": 31.4
+    },
+    "workspace": {
+      "size_mb": 3.31,
+      "file_count": 258,
+      "dir_count": 76
+    }
+  },
+  {
+    "timestamp": "2026-05-15T06:05:04.720165+08:00",
+    "disk": {
+      "total_gb": 39.07,
+      "used_gb": 12.25,
+      "free_gb": 25.14,
+      "percent_used": 31.4
+    },
+    "workspace": {
+      "size_mb": 3.31,
+      "file_count": 257,
+      "dir_count": 76
+    }
+  },
+  {
+    "timestamp": "2026-05-16T05:45:40.607404+08:00",
+    "disk": {
+      "total_gb": 39.07,
+      "used_gb": 12.27,
+      "free_gb": 25.12,
+      "percent_used": 31.4
+    },
+    "workspace": {
+      "size_mb": 3.31,
+      "file_count": 257,
+      "dir_count": 76
+    }
+  },
+  {
+    "timestamp": "2026-05-16T06:05:02.378408+08:00",
+    "disk": {
+      "total_gb": 39.07,
+      "used_gb": 12.27,
+      "free_gb": 25.12,
+      "percent_used": 31.4
+    },
+    "workspace": {
+      "size_mb": 3.31,
+      "file_count": 257,
+      "dir_count": 76
+    }
+  },
+  {
+    "timestamp": "2026-05-17T05:45:37.347002+08:00",
+    "disk": {
+      "total_gb": 39.07,
+      "used_gb": 12.25,
+      "free_gb": 25.14,
+      "percent_used": 31.4
+    },
+    "workspace": {
+      "size_mb": 3.31,
+      "file_count": 257,
+      "dir_count": 76
+    }
+  },
+  {
+    "timestamp": "2026-05-17T06:05:06.360055+08:00",
+    "disk": {
+      "total_gb": 39.07,
+      "used_gb": 12.25,
+      "free_gb": 25.14,
+      "percent_used": 31.4
+    },
+    "workspace": {
+      "size_mb": 3.31,
+      "file_count": 257,
+      "dir_count": 76
+    }
+  },
+  {
+    "timestamp": "2026-05-18T06:05:08.879379+08:00",
+    "disk": {
+      "total_gb": 39.07,
+      "used_gb": 12.28,
+      "free_gb": 25.11,
+      "percent_used": 31.4
+    },
+    "workspace": {
+      "size_mb": 3.83,
+      "file_count": 265,
+      "dir_count": 77
+    }
+  },
+  {
+    "timestamp": "2026-05-19T06:05:03.950442+08:00",
+    "disk": {
+      "total_gb": 39.07,
+      "used_gb": 12.29,
+      "free_gb": 25.1,
+      "percent_used": 31.4
+    },
+    "workspace": {
+      "size_mb": 3.99,
+      "file_count": 281,
+      "dir_count": 78
+    }
+  },
+  {
+    "timestamp": "2026-05-20T05:45:39.791469+08:00",
+    "disk": {
+      "total_gb": 39.07,
+      "used_gb": 12.29,
+      "free_gb": 25.1,
+      "percent_used": 31.5
+    },
+    "workspace": {
+      "size_mb": 3.81,
+      "file_count": 264,
+      "dir_count": 73
+    }
+  },
+  {
+    "timestamp": "2026-05-20T06:05:03.116279+08:00",
+    "disk": {
+      "total_gb": 39.07,
+      "used_gb": 12.29,
+      "free_gb": 25.1,
+      "percent_used": 31.5
+    },
+    "workspace": {
+      "size_mb": 3.81,
+      "file_count": 264,
+      "dir_count": 73
+    }
+  },
+  {
+    "timestamp": "2026-05-21T06:05:06.936387+08:00",
+    "disk": {
+      "total_gb": 39.07,
+      "used_gb": 12.5,
+      "free_gb": 24.89,
+      "percent_used": 32.0
+    },
+    "workspace": {
+      "size_mb": 3.81,
+      "file_count": 264,
+      "dir_count": 73
+    }
   }
 ]

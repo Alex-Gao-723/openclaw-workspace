@@ -180,33 +180,6 @@ requests.post(
 >   --output /tmp/voice.mp3
 > ```
 
----
-
-## 阿里云服务器 (2026-03-26 添加)
-
-用于部署静态网页和托管文件
-
-| 配置项 | 值 |
-|--------|-----|
-| **服务器 IP** | 47.99.105.13 |
-| **SSH 端口** | 22 |
-| **用户名** | root |
-| **密码** | Gy280956117 |
-| **Web 目录** | /usr/share/nginx/html/ |
-| **Nginx 版本** | 1.28.1 |
-| **访问地址** | http://47.99.105.13/ |
-
-### 使用方法
-```bash
-# 上传文件到服务器
-sshpass -p "Gy280956117" scp -o StrictHostKeyChecking=no local_file.html root@47.99.105.13:/usr/share/nginx/html/
-
-# SSH 登录
-sshpass -p "Gy280956117" ssh -o StrictHostKeyChecking=no root@47.99.105.13
-```
-
-## GitHub
-
 - **Username:** `Alex-Gao-723`
 - **Name:** Garfield Yuan
 - **Token:** 从环境变量 `GITHUB_TOKEN` 读取

@@ -95,7 +95,7 @@
    - QClaw: 个人用户、极简上手、OpenClaw封装
 
 3. **OpenClaw分析报告部署**
-   - 报告访问：http://47.99.105.13/openclaw/
+   - 报告访问：[已移除]
    - 部署路径：/www/server/nginx/html/openclaw/
    - 服务器：宝塔面板管理
 

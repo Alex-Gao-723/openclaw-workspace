@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大模型技术全景图谱 | LLM · RAG · Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: rgba(255,255,255,0.03);
+  --text-primary: #e8e8f0;
+  --text-secondary: #8888a0;
+  --accent-cyan: #00d4ff;
+  --accent-purple: #a855f7;
+  --accent-amber: #f59e0b;
+  --accent-pink: #ec4899;
+  --border: rgba(255,255,255,0.08);
+  --glow-cyan: 0 0 20px rgba(0,212,255,0.3);
+  --glow-purple: 0 0 30px rgba(168,85,247,0.2);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', 'Noto Serif SC', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: 
+    radial-gradient(ellipse at 30% 20%, rgba(0,212,255,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(168,85,247,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(236,72,153,0.04) 0%, transparent 60%);
+  animation: heroFloat 15s ease-in-out infinite;
+}
+
+@keyframes heroFloat {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(2%, -2%) rotate(1deg); }
+  66% { transform: translate(-1%, 1%) rotate(-0.5deg); }
+}
+
+.hero-content { position: relative; z-index: 1; }
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  margin-bottom: 2rem;
+}
+
+.hero-badge .pulse {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.hero h1 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 50%, var(--accent-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 3rem;
+}
+
+.hero-tags {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.tag:hover {
+  border-color: var(--accent-cyan);
+  box-shadow: var(--glow-cyan);
+  transform: translateY(-2px);
+}
+
+/* ===== SECTIONS ===== */
+.section {
+  padding: 6rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.section-header {
+  margin-bottom: 4rem;
+}
+
+.section-number {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--accent-cyan);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+}
+
+.section h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.section-desc {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  max-width: 600px;
+}
+
+/* ===== LLM STACK ===== */
+.stack-layers {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.layer {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.layer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.layer:hover::before { opacity: 1; }
+
+.layer:hover {
+  border-color: rgba(0,212,255,0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.layer-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.layer-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.layer-icon.base { background: rgba(0,212,255,0.1); }
+.layer-icon.optimize { background: rgba(168,85,247,0.1); }
+.layer-icon.interface { background: rgba(245,158,11,0.1); }
+
+.layer-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.layer-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-family: 'Space Mono', monospace;
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.tech-card {
+  padding: 1.2rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  transition: all 0.3s ease;
+}
+
+.tech-card:hover {
+  border-color: rgba(0,212,255,0.15);
+  background: rgba(255,255,255,0.04);
+}
+
+.tech-card h4 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.tech-card p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===== RAG PIPELINE ===== */
+.pipeline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 3rem;
+}
+
+.pipeline-step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.pipeline-step .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+}
+
+.pipeline-arrow {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}
+
+/* ===== RAG ADVANCED ===== */
+.advanced-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.adv-card {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.adv-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);
+}
+
+.adv-card h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent-purple);
+  font-family: 'Space Mono', monospace;
+}
+
+.adv-card .problem {
+  font-size: 0.8rem;
+  color: var(--accent-amber);
+  margin-bottom: 1rem;
+  font-family: 'Space Mono', monospace;
+}
+
+.adv-card p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* ===== AGENT PARADIGMS ===== */
+.paradigm-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.paradigm-table th,
+.paradigm-table td {
+  padding: 1.2rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.paradigm-table th {
+  background: rgba(0,212,255,0.05);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+.paradigm-table tr:last-child td { border-bottom: none; }
+
+.paradigm-table td {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.paradigm-table td:first-child {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: 'Space Mono', monospace;
+}
+
+/* ===== AGENT COMPONENTS ===== */
+.components-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.comp-card {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.comp-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--glow-purple);
+  border-color: rgba(168,85,247,0.2);
+}
+
+.comp-icon {
+  width: 60px; height: 60px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, rgba(168,85,247,0.1), rgba(0,212,255,0.1));
+  border: 1px solid var(--border);
+}
+
+.comp-card h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+}
+
+.comp-card p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ===== INTEGRATION ===== */
+.integration-flow {
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: 3rem;
+  position: relative;
+}
+
+.flow-start {
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(0,212,255,0.05);
+  margin-bottom: 2rem;
+  font-family: 'Space Mono', monospace;
+}
+
+.flow-branches {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.branch {
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  position: relative;
+}
+
+.branch::before {
+  content: '├─';
+  position: absolute;
+  top: -1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-secondary);
+  font-family: 'Space Mono', monospace;
+}
+
+.branch h5 {
+  font-size: 0.9rem;
+  color: var(--accent-cyan);
+  font-family: 'Space Mono', monospace;
+  margin-bottom: 0.5rem;
+}
+
+.branch p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* ===== EVALUATION ===== */
+.eval-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.eval-card {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: 2rem;
+}
+
+.eval-card .metric {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--accent-amber);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.eval-card h4 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.eval-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.eval-card li {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  padding: 0.3rem 0;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.eval-card li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--accent-purple);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center;
+  padding: 4rem 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.footer .signature {
+  font-family: 'Space Mono', monospace;
+  color: var(--accent-cyan);
+  margin-top: 0.5rem;
+}
+
+/* ===== SCROLL ANIMATIONS ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .section { padding: 3rem 1rem; }
+  .pipeline { flex-direction: column; }
+  .pipeline-arrow { transform: rotate(90deg); }
+  .tech-grid { grid-template-columns: 1fr; }
+  .paradigm-table { font-size: 0.8rem; }
+  .paradigm-table th, .paradigm-table td { padding: 0.8rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="pulse"></span>
+      技术全景图谱
+    </div>
+    <h1>大模型技术栈<br>RAG · Agent</h1>
+    <p class="hero-subtitle">从 Transformer 到智能体：系统化梳理 LLM 核心架构、检索增强生成与企业级 Agent 工程实践</p>
+    <div class="hero-tags">
+      <span class="tag">🧠 大模型技术栈</span>
+      <span class="tag">🔍 RAG 架构</span>
+      <span class="tag">🤖 Agent 框架</span>
+      <span class="tag">📊 评估体系</span>
+    </div>
+  </div>
+</section>
+
+<!-- LLM STACK -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">01 / 大模型技术栈</div>
+    <h2>从预训练到推理优化</h2>
+    <p class="section-desc">理解 LLM 的三层架构：基础能力层、推理优化层、应用接口层</p>
+  </div>
+
+  <div class="stack-layers">
+    <!-- 基础层 -->
+    <div class="layer reveal">
+      <div class="layer-header">
+        <div class="layer-icon base">⚡</div>
+        <div>
+          <div class="layer-title">基础层</div>
+          <div class="layer-subtitle">BASE LAYER — 模型能力的根基</div>
+        </div>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <h4>Transformer 架构</h4>
+          <p>Self-Attention 的 Q/K/V 机制是理解一切 LLM 的基础。RoPE 位置编码优于传统正弦编码，更适合长文本外推。</p>
+        </div>
+        <div class="tech-card">
+          <h4>预训练范式</h4>
+          <p>自回归（GPT）为主流，Next Token Prediction 是核心。理解其局限性：推理能力弱于显式 CoT。</p>
+        </div>
+        <div class="tech-card">
+          <h4>微调技术</h4>
+          <p>SFT 对齐格式，RLHF/DPO 对齐偏好。DPO 比 PPO 更稳定，KTO 无需成对数据。</p>
+        </div>
+        <div class="tech-card">
+          <h4>参数高效微调</h4>
+          <p>LoRA 是工业界标配；QLoRA 用 NF4 量化可在消费级 GPU 微调 65B 模型。</p>
+        </div>
+        <div class="tech-card">
+          <h4>上下文学习 ICL</h4>
+          <p>ICL 本质是隐式梯度下降；CoT 显著提升推理能力但增加 token 消耗。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 推理优化层 -->
+    <div class="layer reveal">
+      <div class="layer-header">
+        <div class="layer-icon optimize">🚀</div>
+        <div>
+          <div class="layer-title">推理优化层</div>
+          <div class="layer-subtitle">OPTIMIZE LAYER — 部署性能的关键</div>
+        </div>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <h4>KV Cache</h4>
+          <p>缓存历史 token 的 K/V 向量，避免重复计算。显存占用随序列长度线性增长，是长文本瓶颈。</p>
+        </div>
+        <div class="tech-card">
+          <h4>模型量化</h4>
+          <p>INT8/INT4/FP8 降低权重精度。GPTQ/AWQ 静态量化，SmoothQuant 动态量化。部署必备。</p>
+        </div>
+        <div class="tech-card">
+          <h4>投机解码</h4>
+          <p>小模型草稿 + 大模型验证，并行生成。长文本生成加速 2-3 倍，代码生成效果尤佳。</p>
+        </div>
+        <div class="tech-card">
+          <h4>连续批处理</h4>
+          <p>vLLM/SGLang 的 PageAttention 动态调度。相比静态批处理吞吐提升 10x+，服务化核心。</p>
+        </div>
+        <div class="tech-card">
+          <h4>模型蒸馏</h4>
+          <p>大模型教小模型，保留能力降低成本。如 Llama-3.2 1B/3B distilled from 70B/405B。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 应用接口层 -->
+    <div class="layer reveal">
+      <div class="layer-header">
+        <div class="layer-icon interface">🔌</div>
+        <div>
+          <div class="layer-title">应用接口层</div>
+          <div class="layer-subtitle">INTERFACE LAYER — 连接应用与模型</div>
+        </div>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <h4>Function Calling</h4>
+          <p>模型输出结构化工具调用参数。本质是结构化 JSON 生成，Schema 约束用 constrained decoding。</p>
+        </div>
+        <div class="tech-card">
+          <h4>Structured Output</h4>
+          <p>强制输出符合 JSON Schema。OpenAI/Claude 都支持，比 Function Calling 更通用。</p>
+        </div>
+        <div class="tech-card">
+          <h4>System Prompt 工程</h4>
+          <p>分层设计：Global System → Task-specific → Few-shot Examples。定义模型角色和行为边界。</p>
+        </div>
+        <div class="tech-card">
+          <h4>多模态能力</h4>
+          <p>文本+图像+音频统一处理。CLIP/LLaVA 架构理解；趋势是原生多模态（GPT-4o、Gemini）。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RAG PIPELINE -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">02 / RAG 检索增强生成</div>
+    <h2>从简单检索到高级架构</h2>
+    <p class="section-desc">RAG 不是「加个向量库」，而是一套完整的检索-排序-生成-评估体系</p>
+  </div>
+
+  <div class="reveal">
+    <div class="pipeline">
+      <div class="pipeline-step"><span class="dot"></span> 用户Query</div>
+      <span class="pipeline-arrow">→</span>
+      <div class="pipeline-step"><span class="dot"></span> 查询理解</div>
+      <span class="pipeline-arrow">→</span>
+      <div class="pipeline-step"><span class="dot"></span> 检索</div>
+      <span class="pipeline-arrow">→</span>
+      <div class="pipeline-step"><span class="dot"></span> 重排序</div>
+      <span class="pipeline-arrow">→</span>
+      <div class="pipeline-step"><span class="dot"></span> 上下文组装</div>
+      <span class="pipeline-arrow">→</span>
+      <div class="pipeline-step"><span class="dot"></span> LLM生成</div>
+      <span class="pipeline-arrow">→</span>
+      <div class="pipeline-step"><span class="dot"></span> 后处理</div>
+    </div>
+  </div>
+
+  <div class="stack-layers" style="margin-bottom:3rem">
+    <div class="layer reveal">
+      <div class="tech-grid">
+        <div class="tech-card">
+          <h4>查询理解</h4>
+          <p>Query Rewriting、HyDE、Query Expansion。用户原始 Query 往往不适合直接检索；HyDE 用 LLM 生成假设文档再 Embedding 检索，解决词汇鸿沟。</p>
+        </div>
+        <div class="tech-card">
+          <h4>混合检索</h4>
+          <p>Dense Retrieval（Embedding）+ Sparse Retrieval（BM25）。Embedding 擅长语义，BM25 擅长精确匹配；RRF 融合通常最优。</p>
+        </div>
+        <div class="tech-card">
+          <h4>向量数据库选型</h4>
+          <p>Milvus、Qdrant、Weaviate、PGVector。关注：过滤能力、混合搜索、多租户、云原生。本质是索引和查询优化问题。</p>
+        </div>
+        <div class="tech-card">
+          <h4>Embedding 模型</h4>
+          <p>OpenAI text-embedding-3、BGE、GTE、E5。领域微调 Embedding 比通用模型检索准确率高 30%+。</p>
+        </div>
+        <div class="tech-card">
+          <h4>重排序 Reranker</h4>
+          <p>两阶段架构：双塔快速召回 + 交叉编码器精排。重排序是性价比最高的优化点，如 bge-reranker。</p>
+        </div>
+        <div class="tech-card">
+          <h4>上下文组装</h4>
+          <p>盲目塞满上下文会稀释注意力。关键信息放开头和结尾——LLM 存在「中间遗忘」效应。需截断、摘要、过滤。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Noto Serif SC',serif;font-size:1.5rem;margin-bottom:2rem;text-align:center" class="reveal">高级 RAG 架构</h3>
+
+  <div class="advanced-grid">
+    <div class="adv-card reveal">
+      <h4>Self-RAG</h4>
+      <div class="problem">解决：生成内容无依据、幻觉</div>
+      <p>模型自反思：检索 → 生成 → 判断是否需要再检索 → 迭代。让模型自己决定「我是否知道」以及「我还需要查什么」。</p>
+    </div>
+    <div class="adv-card reveal">
+      <h4>Corrective RAG</h4>
+      <div class="problem">解决：检索结果质量差</div>
+      <p>评估检索文档相关性，低质量时切换网络搜索或改写查询。动态修正检索路径，避免垃圾进垃圾出。</p>
+    </div>
+    <div class="adv-card reveal">
+      <h4>GraphRAG</h4>
+      <div class="problem">解决：跨文档全局推理弱</div>
+      <p>构建实体关系图谱，利用社区发现提取全局主题。适合企业知识库，实现「连接碎片化知识」的全局理解。</p>
+    </div>
+    <div class="adv-card reveal">
+      <h4>RAPTOR</h4>
+      <div class="problem">解决：长文档层级理解</div>
+      <p>自下而上聚类摘要，构建树状索引。适合书籍、论文等长文本，实现从细节到概览的多层级检索。</p>
+    </div>
+    <div class="adv-card reveal">
+      <h4>Adaptive RAG</h4>
+      <div class="problem">解决：不同问题需要不同复杂度</div>
+      <p>先分类问题复杂度：简单问题直接答，复杂问题多步检索。避免「杀鸡用牛刀」的资源浪费。</p>
+    </div>
+  </div>
+
+  <div class="layer reveal" style="margin-top:3rem">
+    <h4 style="font-family:'Space Mono',monospace;color:var(--accent-amber);margin-bottom:1rem">⚠️ 企业 RAG 落地五大挑战</h4>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <h4>1. 数据预处理</h4>
+        <p>PDF/Word/Excel 解析质量决定上限。表格、图片、多列布局是难点，需专门的文档解析管道。</p>
+      </div>
+      <div class="tech-card">
+        <h4>2. 增量更新</h4>
+        <p>向量库如何高效处理文档增删改？不能全量重建。需要增量索引更新策略和版本控制。</p>
+      </div>
+      <div class="tech-card">
+        <h4>3. 权限隔离</h4>
+        <p>不同用户看到不同内容。向量库需支持 metadata 过滤 + ACL，与企业 IAM 系统集成。</p>
+      </div>
+      <div class="tech-card">
+        <h4>4. 评估体系</h4>
+        <p>三维指标：Retrieval Accuracy + Answer Faithfulness + Answer Relevance。不能只看生成流畅度。</p>
+      </div>
+      <div class="tech-card">
+        <h4>5. 幻觉控制</h4>
+        <p>即使检索了也可能编造。需要 Citation 机制（让模型引用来源）+ 事实核查层。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENT -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">03 / Agent 框架</div>
+    <h2>从 ReAct 到 Multi-Agent 协作</h2>
+    <p class="section-desc">Agent 是 LLM 的「手脚和记忆」，核心在于规划、工具使用与反思的闭环</p>
+  </div>
+
+  <h3 style="font-family:'Noto Serif SC',serif;font-size:1.5rem;margin-bottom:2rem" class="reveal">核心范式对比</h3>
+
+  <div class="reveal" style="overflow-x:auto">
+    <table class="paradigm-table">
+      <thead>
+        <tr>
+          <th>范式</th>
+          <th>代表</th>
+          <th>工作机制</th>
+          <th>适用场景</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ReAct</td>
+          <td>最经典</td>
+          <td>Thought → Action → Observation 循环</td>
+          <td>通用工具使用；简单任务</td>
+        </tr>
+        <tr>
+          <td>Plan-and-Solve</td>
+          <td>Plan-and-Execute</td>
+          <td>先制定计划，再逐步执行</td>
+          <td>复杂多步任务；需要全局规划</td>
+        </tr>
+        <tr>
+          <td>Reflection</td>
+          <td>Reflexion</td>
+          <td>执行 → 评估 → 反思 → 重试</td>
+          <td>代码生成、写作等需要迭代的任务</td>
+        </tr>
+        <tr>
+          <td>Multi-Agent</td>
+          <td>AutoGen、CrewAI</td>
+          <td>多个 Agent 分工协作</td>
+          <td>复杂系统：研究员+写手+审核员</td>
+        </tr>
+        <tr>
+          <td>DAG/Workflow</td>
+          <td>LangGraph</td>
+          <td>预定义执行图，节点是 Agent/工具</td>
+          <td>企业流程自动化；确定性高</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="font-family:'Noto Serif SC',serif;font-size:1.5rem;margin:3rem 0 2rem" class="reveal">Agent 六大组件</h3>
+
+  <div class="components-grid">
+    <div class="comp-card reveal">
+      <div class="comp-icon">🔧</div>
+      <h4>工具 Tools</h4>
+      <p>扩展 LLM 能力到外部世界。设计原则：原子性、幂等性、错误可恢复。Tool Schema 要清晰明确。</p>
+    </div>
+    <div class="comp-card reveal">
+      <div class="comp-icon">🧠</div>
+      <h4>记忆 Memory</h4>
+      <p>短期记忆（Buffer/Window）+ 长期记忆（Vector Store）。Entity Memory 提取关键实体实现结构化记忆。</p>
+    </div>
+    <div class="comp-card reveal">
+      <div class="comp-icon">📋</div>
+      <h4>规划 Planning</h4>
+      <p>将复杂目标分解为可执行步骤。LLM-based planning 不稳定，需结合规则引擎提升可靠性。</p>
+    </div>
+    <div class="comp-card reveal">
+      <div class="comp-icon">👁️</div>
+      <h4>观察 Observation</h4>
+      <p>感知环境反馈。不仅是文本，也可以是系统状态、错误码、用户反馈。观察质量决定决策质量。</p>
+    </div>
+    <div class="comp-card reveal">
+      <div class="comp-icon">⚡</div>
+      <h4>行动 Action</h4>
+      <p>区分信息收集类（搜索、读取）vs 副作用类（发送邮件、修改数据）。副作用操作需审计和确认。</p>
+    </div>
+    <div class="comp-card reveal">
+      <div class="comp-icon">🔄</div>
+      <h4>反思 Reflection</h4>
+      <p>执行后评估结果，识别错误并调整策略。Reflexion 模式通过「自我批评」实现持续改进。</p>
+    </div>
+  </div>
+
+  <div class="layer reveal" style="margin-top:3rem">
+    <h4 style="font-family:'Space Mono',monospace;color:var(--accent-pink);margin-bottom:1.5rem">⚠️ Agent 工程六大陷阱</h4>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <h4>🌀 循环陷阱</h4>
+        <p>Agent 在 Tool 间无限循环。解法：设置最大步数；引入「放弃」机制；规划阶段设定终止条件。</p>
+      </div>
+      <div class="tech-card">
+        <h4>🎯 工具选择失误</h4>
+        <p>选错工具或参数错误。解法：Function Calling Schema 详尽；增加 Tool 描述；提供 Shot 示例。</p>
+      </div>
+      <div class="tech-card">
+        <h4>💥 上下文爆炸</h4>
+        <p>多轮后上下文超限。解法：关键信息提取到工作记忆；定期摘要历史；多层级记忆架构。</p>
+      </div>
+      <div class="tech-card">
+        <h4>🎭 幻觉计划</h4>
+        <p>制定的计划不可执行。解法：计划后验证可行性；结合确定性规则引擎；人介入关键决策点。</p>
+      </div>
+      <div class="tech-card">
+        <h4>⏱️ 延迟问题</h4>
+        <p>多步 Agent 响应慢。解法：流式输出每步状态；并行执行独立分支；预加载常用结果。</p>
+      </div>
+      <div class="tech-card">
+        <h4>🛡️ 安全边界</h4>
+        <p>Agent 执行危险操作。解法：权限分级；副作用工具需确认；沙箱执行；完整审计日志。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRATION -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">04 / 整合协同</div>
+    <h2>RAG + Agent 的统一架构</h2>
+    <p class="section-desc">在实际系统中，RAG 和 Agent 不是割裂的，而是相互增强的统一体</p>
+  </div>
+
+  <div class="integration-flow reveal">
+    <div class="flow-start">用户 Query → Agent(理解意图) → 路由决策</div>
+    <div class="flow-branches">
+      <div class="branch">
+        <h5>知识问答</h5>
+        <p>RAG 检索产品知识库 → 生成回答</p>
+      </div>
+      <div class="branch">
+        <h5>工单处理</h5>
+        <p>调用 CRM API → 更新系统</p>
+      </div>
+      <div class="branch">
+        <h5>数据分析</h5>
+        <p>生成 SQL → 查询 → 可视化</p>
+      </div>
+      <div class="branch">
+        <h5>复杂问题</h5>
+        <p>分解子任务 → 多 Agent 协作</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="layer reveal" style="margin-top:3rem">
+    <h4 style="font-family:'Space Mono',monospace;color:var(--accent-cyan);margin-bottom:1.5rem">🔗 协同关系</h4>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <h4>RAG 作为 Agent 的工具</h4>
+        <p>Agent 把 RAG 当作「知识检索工具」，在需要事实时调用。工具调用返回的检索结果作为 Observation 输入。</p>
+      </div>
+      <div class="tech-card">
+        <h4>Agent 增强 RAG</h4>
+        <p>Agent 可以自主决定检索策略：改写 Query、换数据库、多轮检索。自适应检索策略提升召回质量。</p>
+      </div>
+      <div class="tech-card">
+        <h4>记忆层统一</h4>
+        <p>Agent 的长期记忆和 RAG 的向量库共享基础设施。用户偏好、历史对话、企业知识统一检索。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVALUATION -->
+<section class="section">
+  <div class="section-header reveal">
+    <div class="section-number">05 / 评估与监控</div>
+    <h2>决定成败的最后一公里</h2>
+    <p class="section-desc">常被忽视但决定系统上限：建立完整的评估-监控-优化闭环</p>
+  </div>
+
+  <div class="eval-grid">
+    <div class="eval-card reveal">
+      <div class="metric">DIMENSION 01</div>
+      <h4>检索质量</h4>
+      <ul>
+        <li>Hit Rate（命中率）</li>
+        <li>MRR（平均倒数排名）</li>
+        <li>NDCG（归一化折损累积增益）</li>
+      </ul>
+    </div>
+    <div class="eval-card reveal">
+      <div class="metric">DIMENSION 02</div>
+      <h4>生成质量</h4>
+      <ul>
+        <li>幻觉率（Hallucination Rate）</li>
+        <li>Faithfulness（忠实度）</li>
+        <li>Relevance（相关性）</li>
+      </ul>
+    </div>
+    <div class="eval-card reveal">
+      <div class="metric">DIMENSION 03</div>
+      <h4>Agent 效果</h4>
+      <ul>
+        <li>任务完成率</li>
+        <li>步数效率</li>
+        <li>工具使用准确率</li>
+      </ul>
+    </div>
+    <div class="eval-card reveal">
+      <div class="metric">DIMENSION 04</div>
+      <h4>系统性能</h4>
+      <ul>
+        <li>P95 延迟</li>
+        <li>吞吐量 QPS</li>
+        <li>错误率</li>
+      </ul>
+    </div>
+    <div class="eval-card reveal">
+      <div class="metric">DIMENSION 05</div>
+      <h4>成本控制</h4>
+      <ul>
+        <li>Token 消耗</li>
+        <li>API 调用次数</li>
+        <li>缓存命中率</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>大模型技术全景图谱 · 系统化梳理 LLM · RAG · Agent</p>
+  <p class="signature">— Saber, the Knight of 0 and 1 ⚔️</p>
+</footer>
+
+<script>
+// Scroll reveal animation
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
